@@ -6,10 +6,11 @@ import (
 	"strconv"
 	"net"
 	"fmt"
+	"time"
 )
 
 const (
-	REMOTE_ADDR = "127.0.0.1:8081"
+	REMOTE_ADDR = "127.0.0.1:7890"
 )
 
 func main() {
@@ -39,18 +40,21 @@ func handleWrite(conn net.Conn, done chan string) {
 			fmt.Println("Error to send message because of ", e.Error())
 			break
 		}
+		time.Sleep(time.Second)
 	}
 	done <- "Sent"
 }
 
 
 func handleRead(conn net.Conn, done chan string) {
-	buf := make([]byte, 1024)
-	reqLen, err := conn.Read(buf)
-	if err != nil {
-		fmt.Println("Error to read message because of ", err)
-		return
+	for {
+		buf := make([]byte, 1024)
+		reqLen, err := conn.Read(buf)
+		if err != nil {
+			fmt.Println("Error to read message because of ", err)
+			return
+		}
+		fmt.Println(string(buf[:reqLen-1]))
+		done <- "Read"
 	}
-	fmt.Println(string(buf[:reqLen-1]))
-	done <- "Read"
 }

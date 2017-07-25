@@ -3,7 +3,6 @@ package main
 import (
 	"flag"
 	"fmt"
-	"io"
 	"net"
 	"os"
 )
@@ -31,7 +30,7 @@ func main() {
 		}
 
 		//logs an incoming message
-		fmt.Printf("Received message %s -> %s \n", conn.RemoteAddr(), conn.LocalAddr())
+		fmt.Printf("%s -> %s \n", conn.RemoteAddr(), conn.LocalAddr())
 		// Handle connections in a new goroutine.
 		go handleRequest(conn)
 	}
@@ -40,7 +39,19 @@ func main() {
 
 func handleRequest(conn net.Conn) {
 	defer conn.Close()
+
 	for {
-		io.Copy(conn, conn)
+		buf := make([]byte, 1024)
+		reqLen, err := conn.Read(buf)
+		if err != nil {
+			fmt.Println("Error reading:", err.Error())
+			break
+		}
+
+		msg_reply := string(" Message received ")
+		msg_reply += string(buf[:reqLen-1])
+		fmt.Println("msg reply to client ", msg_reply)
+
+		conn.Write([]byte(msg_reply))
 	}
 }
