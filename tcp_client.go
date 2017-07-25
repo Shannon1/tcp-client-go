@@ -42,6 +42,8 @@ func handleWrite(conn net.Conn, done chan string) {
 	}
 	done <- "Sent"
 }
+
+
 func handleRead(conn net.Conn, done chan string) {
 	buf := make([]byte, 1024)
 	reqLen, err := conn.Read(buf)
