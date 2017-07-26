@@ -48,10 +48,16 @@ func handleRequest(conn net.Conn) {
 			break
 		}
 
+
 		msg_reply := string(" Message received ")
 		msg_reply += string(buf[:reqLen-1])
 		fmt.Println("msg reply to client ", msg_reply)
 
-		conn.Write([]byte(msg_reply))
+		_, err = conn.Write([]byte(msg_reply))
+		if err != nil {
+			fmt.Println("Error reading:", err.Error())
+		}
+
+
 	}
 }

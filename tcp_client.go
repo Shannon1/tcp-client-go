@@ -31,10 +31,13 @@ func main() {
 
 	fmt.Println(<-done)
 	fmt.Println(<-done)
+
+	time.Sleep(time.Second * 20)
 }
 
 func handleWrite(conn net.Conn, done chan string) {
 	for i := 10; i > 0; i-- {
+		fmt.Println("count ", strconv.Itoa(i))
 		_, e := conn.Write([]byte("hello " + strconv.Itoa(i) + "\r\n"))
 		if e != nil {
 			fmt.Println("Error to send message because of ", e.Error())
@@ -55,6 +58,6 @@ func handleRead(conn net.Conn, done chan string) {
 			return
 		}
 		fmt.Println(string(buf[:reqLen-1]))
-		done <- "Read"
+		done <- "Receive"
 	}
 }
