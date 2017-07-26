@@ -1,12 +1,13 @@
 package main
 
-//import "bufio"
 import (
 	"os"
 	"strconv"
 	"net"
 	"fmt"
 	"time"
+	"github.com/golang/protobuf/proto"
+	"testpbgo"
 )
 
 const (
@@ -36,7 +37,7 @@ func main() {
 }
 
 func handleWrite(conn net.Conn, done chan string) {
-	for i := 10; i > 0; i-- {
+	for i := 1; i > 0; i-- {
 		fmt.Println("count ", strconv.Itoa(i))
 		_, e := conn.Write([]byte("hello " + strconv.Itoa(i) + "\r\n"))
 		if e != nil {
@@ -57,7 +58,27 @@ func handleRead(conn net.Conn, done chan string) {
 			fmt.Println("Error to read message because of ", err)
 			return
 		}
-		fmt.Println(string(buf[:reqLen-1]))
+		fmt.Println("recv len: ", reqLen)
+		decode(buf[:reqLen-1])
 		done <- "Receive"
 	}
+}
+
+
+func decode(data []byte) {
+	// 进行解码
+	newTest := &testpbgo.Test{}
+	err := proto.Unmarshal(data, newTest)
+	if err != nil {
+		fmt.Println("unmarshaling error: ", err)
+	}
+
+	fmt.Println("label: ", newTest.GetLabel())
+	fmt.Println("type: ", newTest.GetType())
+	for _, one := range newTest.GetReps() {
+		fmt.Println("reps: ", one)
+	}
+
+	fmt.Println("Optionalgroup: ", newTest.GetOptionalgroup().RequiredField)
+
 }

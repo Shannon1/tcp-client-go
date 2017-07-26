@@ -5,6 +5,8 @@ import (
 	"fmt"
 	"net"
 	"os"
+	"github.com/golang/protobuf/proto"
+	"testpbgo"
 )
 
 
@@ -49,9 +51,11 @@ func handleRequest(conn net.Conn) {
 		}
 
 
-		msg_reply := string(" Message received ")
-		msg_reply += string(buf[:reqLen-1])
-		fmt.Println("msg reply to client ", msg_reply)
+		msg_recv := string(" Message received ")
+		msg_recv += string(buf[:reqLen-1])
+		fmt.Println(msg_recv)
+
+		msg_reply, _ := createTestPb()
 
 		_, err = conn.Write([]byte(msg_reply))
 		if err != nil {
@@ -60,4 +64,24 @@ func handleRequest(conn net.Conn) {
 
 
 	}
+}
+
+
+func createTestPb() ([]byte, error) {
+	// 创建一个消息 Test
+	test := &testpbgo.Test{
+		// 使用辅助函数设置域的值
+		Label: proto.String("hello"),
+		Type:  proto.Int32(17),
+		Optionalgroup: &testpbgo.Test_OptionalGroup{
+			RequiredField: proto.String("good bye"),
+		},
+	}
+
+	data, err := proto.Marshal(test)
+	if err != nil {
+		fmt.Println("marshaling error: ", err)
+	}
+
+	return data, err
 }
