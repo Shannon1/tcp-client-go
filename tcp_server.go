@@ -6,7 +6,7 @@ import (
 	"net"
 	"os"
 	"github.com/golang/protobuf/proto"
-	"testpbgo"
+	"tcp-client-go/testpbgo"
 )
 
 
