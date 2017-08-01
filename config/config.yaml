@@ -1,0 +1,29 @@
+# config file demo
+
+server:
+  port: 12345
+  threads_conn: 1
+  workers: 5
+
+log:
+  path: ./log/
+  level: debug
+
+db:
+  write:
+    host: 127.0.0.1
+    port: 3306
+    user: root
+    password: abc-123
+    schema: db_name
+    init_conn_num: 5
+    max_conn_num: 100
+  read:
+    - host: 127.0.0.1
+      port: 3306
+      user: root
+      password: abc-123
+      schema: ""
+      init_conn_num: 5
+      max_conn_num: 100
+
