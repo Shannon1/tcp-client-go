@@ -5,9 +5,9 @@ import (
 )
 
 
-func TestParse_config(t *testing.T) {
+func TestParseConfig(t *testing.T) {
 	filePath := "../config/config.yaml"
-	config, err := Parse_config(filePath)
+	config, err := ParseConfig(filePath)
 	if err != nil {
 		t.Error("Parse_Config error.")
 		t.Error(err.Error())

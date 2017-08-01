@@ -37,7 +37,7 @@ type TConfig struct {
 	}
 }
 
-func Parse_config(filePath string) (TConfig, error) {
+func ParseConfig(filePath string) (TConfig, error) {
 	log.Println("filename: ", filePath)
 
 	file, err := os.Open(filePath)
