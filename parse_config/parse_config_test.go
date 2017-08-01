@@ -15,6 +15,4 @@ func TestParseConfig(t *testing.T) {
 	}
 
 	t.Log(config)
-
-
 }
