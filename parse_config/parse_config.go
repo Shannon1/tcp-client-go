@@ -42,7 +42,7 @@ func Parse_config(filePath string) (TConfig, error) {
 
 	file, err := os.Open(filePath)
 	if err != nil {
-		log.Fatal("Open config file %s failed.", filePath)
+		log.Fatal("Open config file failed, filename: ", filePath)
 	}
 	defer file.Close()
 
